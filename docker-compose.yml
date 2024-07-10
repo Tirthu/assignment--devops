@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+    command: npm start
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+
+  backend:
+    image: node:14
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    ports:
+      - "5000:5000"
+    command: npm run dev
+    environment:
+      - DB_USER=admin
+      - DB_PASSWORD=12345
+      - DB_NAME=ecommerce_db
+      - DB_HOST=mongodb
+
+  mongodb:
+    image: mongo:4.2
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=12345
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
